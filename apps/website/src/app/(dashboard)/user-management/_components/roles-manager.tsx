@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 type Role = {
@@ -19,13 +19,14 @@ export function RolesManager() {
     const [saving, setSaving] = useState(false);
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+    const accessToken = session?.accessToken;
 
-    const loadRoles = async () => {
-        if (!session?.accessToken) return;
+    const loadRoles = useCallback(async () => {
+        if (!accessToken) return;
         setLoading(true);
         try {
             const response = await fetch(`${backendUrl}/roles`, {
-                headers: { Authorization: `Bearer ${session.accessToken}` },
+                headers: { Authorization: `Bearer ${accessToken}` },
             });
             if (!response.ok) {
                 throw new Error('Unable to load roles');
@@ -37,11 +38,12 @@ export function RolesManager() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [accessToken, backendUrl]);
 
     useEffect(() => {
-        void loadRoles();
-    }, [session?.accessToken]);
+        const timeoutId = window.setTimeout(() => void loadRoles(), 0);
+        return () => window.clearTimeout(timeoutId);
+    }, [loadRoles]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

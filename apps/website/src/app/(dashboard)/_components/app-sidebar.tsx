@@ -40,7 +40,7 @@ const navItems: {
         items: [
             { title: 'Users', href: '/user-management/users', icon: Users },
             { title: 'Roles', href: '/user-management/roles', icon: ShieldCheck },
-            { title: 'Role Management', href: '/user-management/role-management', icon: Settings2 },
+            { title: 'Users Management', href: '/user-management/role-management', icon: Settings2 },
         ],
     },
 ];
