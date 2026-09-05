@@ -28,6 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         email: data.user.email,
                         name: data.user.firstName ?? undefined,
                         accessToken: data.accessToken,
+                        roles: data.user.roles ?? [],
                     };
                 } catch {
                     return null;
@@ -39,12 +40,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async jwt({ token, user }) {
             if (user) {
                 token.id = (user as { id: string }).id;
+                token.accessToken = (user as { accessToken: string }).accessToken;
+                token.roles = (user as { roles: string[] }).roles;
             }
             return token;
         },
         async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id as string;
+                session.user.roles = (token.roles as string[]) ?? [];
+                session.accessToken = token.accessToken as string;
             }
             return session;
         },

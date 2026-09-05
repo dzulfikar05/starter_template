@@ -16,7 +16,7 @@ starter-template/
 └── turbo.json
 ```
 
-Environment files are already created in each app package. Add your [Clerk](https://dashboard.clerk.com) keys before running the app.
+Environment files are already created in each app package. Set `AUTH_SECRET` and the backend/database variables before running the app.
 
 ## Database
 

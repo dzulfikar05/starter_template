@@ -16,7 +16,7 @@ Thanks for helping improve **starter-template** and **starter-template**.
 - Node.js 20.19+
 - [Bun](https://bun.sh) 1.3+
 - Docker (for local PostgreSQL)
-- A [Clerk](https://clerk.com) application for auth testing
+- An Auth.js-compatible `AUTH_SECRET` for auth testing
 
 ### Clone and install
 
@@ -34,7 +34,7 @@ cp apps/backend/.env.example apps/backend/.env
 cp apps/website/.env.example apps/website/.env.local
 ```
 
-Add your Clerk keys to `apps/backend/.env` and `apps/website/.env.local` before running the apps.
+Add `AUTH_SECRET`, `BACKEND_URL`, and database settings to the relevant `.env` files before running the apps.
 
 ### Database
 

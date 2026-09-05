@@ -27,7 +27,7 @@ export default function SignInPage() {
         setLoading(false);
 
         if (result?.error) {
-            setError('Email atau password salah');
+            setError('We could not sign you in. Check your email and password and try again.');
             return;
         }
 
@@ -37,10 +37,11 @@ export default function SignInPage() {
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
             <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-lg border border-border p-6">
-                <h1 className="text-xl font-semibold">Sign in</h1>
+                <h1 className="text-xl font-semibold">Welcome back</h1>
+                <p className="text-sm text-muted-foreground">Sign in to continue to your workspace.</p>
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Email</label>
+                    <label className="text-sm font-medium">Email address</label>
                     <input
                         type="email"
                         required
