@@ -1,6 +1,6 @@
 # Starter Template
 
-A full-stack TypeScript monorepo powered by Next.js, NestJS, Clerk, Prisma, and Turborepo.
+A full-stack TypeScript monorepo powered by Next.js, NestJS, AuthJS, Prisma, and Turborepo.
 
 ## Project structure
 
