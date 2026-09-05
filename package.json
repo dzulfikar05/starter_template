@@ -17,6 +17,7 @@
         "start:backend": "turbo run start --filter=@starter-template/database --filter=@starter-template/backend",
         "db:migrate": "cd packages/database && bun run db:migrate",
         "db:migrate:deploy": "cd packages/database && bun run db:migrate:deploy",
+        "db:seed": "cd packages/database && bun run db:seed",
         "db:studio": "cd packages/database && bun run dev"
     },
     "devDependencies": {

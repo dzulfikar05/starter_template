@@ -23,6 +23,16 @@ Environment files are already created in each app package. Set `AUTH_SECRET` and
 ```bash
 docker compose up -d
 bun run db:migrate:deploy
+bun run db:seed
+```
+
+The seed is idempotent and creates the `ADMIN` and `USER` roles, the default
+CRUD permissions, their role-permission assignments, and the default
+administrator account:
+
+```
+Email: admin@mail.com
+Password: password
 ```
 
 Default local connection:
