@@ -39,3 +39,9 @@ export class UpdateUserDto {
     @IsUrl()
     imageUrl?: string;
 }
+
+export class UpdateUserRolesDto {
+    @IsOptional()
+    @IsString({ each: true })
+    roleIds?: string[];
+}
