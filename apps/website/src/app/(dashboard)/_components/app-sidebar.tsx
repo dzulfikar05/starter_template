@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Home, LayoutDashboard, Users, ShieldCheck, Settings2 } from 'lucide-react';
+import * as React from 'react';
+import { ChevronRight, Home, LayoutDashboard, Users, ShieldCheck, Settings2 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import {
     Sidebar,
@@ -16,6 +17,9 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
     SidebarRail,
 } from '@/components/ui/sidebar';
 
@@ -71,25 +75,7 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {navItems.filter((item) => item.title !== 'User Management' || isAdmin).map((item) => (
-                                <SidebarMenuItem key={item.href ?? item.title}>
-                                    <SidebarMenuButton asChild isActive={pathname === item.href}>
-                                        <Link href={item.href ?? item.items?.[0].href ?? '/dashboard'}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                    {item.items && (
-                                        <SidebarMenu className="ml-4 border-l border-border pl-2">
-                                            {item.items.map((subItem) => (
-                                                <SidebarMenuItem key={subItem.href}>
-                                                    <SidebarMenuButton asChild isActive={pathname === subItem.href}>
-                                                        <Link href={subItem.href}><subItem.icon /><span>{subItem.title}</span></Link>
-                                                    </SidebarMenuButton>
-                                                </SidebarMenuItem>
-                                            ))}
-                                        </SidebarMenu>
-                                    )}
-                                </SidebarMenuItem>
+                                <NavigationMenuItem item={item} pathname={pathname} key={`${item.href ?? item.title}-${pathname}`} />
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
@@ -109,5 +95,58 @@ export function AppSidebar() {
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>
+    );
+}
+
+function NavigationMenuItem({
+    item,
+    pathname,
+}: {
+    item: (typeof navItems)[number];
+    pathname: string;
+}) {
+    const hasItems = Boolean(item.items?.length);
+    const hasActiveItem = item.items?.some((subItem) => pathname === subItem.href) ?? false;
+    const [isOpen, setIsOpen] = React.useState(hasActiveItem);
+
+    return (
+        <SidebarMenuItem>
+            {hasItems ? (
+                <>
+                    <SidebarMenuButton
+                        type="button"
+                        isActive={hasActiveItem}
+                        aria-expanded={isOpen}
+                        onClick={() => setIsOpen((open) => !open)}
+                        tooltip={item.title}
+                    >
+                        <item.icon />
+                        <span>{item.title}</span>
+                        <ChevronRight className={`ml-auto transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`} />
+                    </SidebarMenuButton>
+                    {isOpen && (
+                        <SidebarMenuSub>
+                            {item.items?.map((subItem) => (
+                                <SidebarMenuSubItem key={subItem.href}>
+                                    <SidebarMenuSubButton asChild isActive={pathname === subItem.href}>
+                                        <Link href={subItem.href}>
+                                            <subItem.icon />
+                                            <span>{subItem.title}</span>
+                                        </Link>
+                                    </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                            ))}
+                        </SidebarMenuSub>
+                    )}
+                </>
+            ) : (
+                <SidebarMenuButton asChild isActive={pathname === item.href}>
+                    <Link href={item.href ?? '/dashboard'}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                    </Link>
+                </SidebarMenuButton>
+            )}
+        </SidebarMenuItem>
     );
 }

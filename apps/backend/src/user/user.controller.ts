@@ -6,6 +6,7 @@ import {
   Body,
   Logger,
   UseGuards,
+  Param,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
@@ -16,6 +17,7 @@ import type {
   UpdateUserDto,
   UserResponseDto,
   DeleteUserResponseDto,
+  UpdateUserRolesDto,
 } from '@starter-template/types';
 
 @Controller('user')
@@ -36,6 +38,16 @@ export class UserController {
   @Roles('ADMIN')
   async listUsers() {
     return this.userService.list();
+  }
+
+  @Patch(':id/roles')
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
+  async updateUserRoles(
+    @Param('id') userId: string,
+    @Body() body: UpdateUserRolesDto,
+  ) {
+    return this.userService.updateRoles(userId, body);
   }
 
   @Patch('me')

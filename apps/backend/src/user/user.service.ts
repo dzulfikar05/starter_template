@@ -1,6 +1,6 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { prisma } from '@starter-template/database';
-import { UpdateUserDto } from '@starter-template/types';
+import { UpdateUserDto, UpdateUserRolesDto } from '@starter-template/types';
 
 @Injectable()
 export class UserService {
@@ -31,6 +31,36 @@ export class UserService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async updateRoles(userId: string, data: UpdateUserRolesDto) {
+    const roleIds = data.roleIds ?? [];
+
+    const user = await prisma.userEntity.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const validRoles = await prisma.role.findMany({
+      where: { id: { in: roleIds } },
+      select: { id: true },
+    });
+
+    if (validRoles.length !== new Set(roleIds).size) {
+      throw new HttpException('One or more role IDs are invalid', HttpStatus.BAD_REQUEST);
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.userRole.deleteMany({ where: { userId } });
+
+      if (roleIds.length > 0) {
+        await tx.userRole.createMany({
+          data: roleIds.map((roleId) => ({ userId, roleId })),
+        });
+      }
+    });
+
+    return this.findById(userId);
   }
 
   async update(userId: string, data: UpdateUserDto) {
