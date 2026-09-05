@@ -1,0 +1,21 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model UserEntity {
+    id           String   @id @default(cuid())
+    email        String   @unique
+    passwordHash String
+    firstName    String?
+    lastName     String?
+    imageUrl     String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    @@map("users")
+}
