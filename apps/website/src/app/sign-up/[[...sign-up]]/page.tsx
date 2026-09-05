@@ -24,7 +24,7 @@ export default function SignUpPage() {
 
         if (!result.success) {
             setLoading(false);
-            setError(result.error || 'Registrasi gagal');
+            setError(result.error || 'Registration failed. Please try again.');
             return;
         }
 
@@ -42,11 +42,12 @@ export default function SignUpPage() {
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
             <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-lg border border-border p-6">
-                <h1 className="text-xl font-semibold">Sign up</h1>
+                <h1 className="text-xl font-semibold">Create your account</h1>
+                <p className="text-sm text-muted-foreground">Get started with your workspace in minutes.</p>
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 <div className="flex gap-2">
                     <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium">Nama depan</label>
+                        <label className="text-sm font-medium">First name</label>
                         <input
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
@@ -54,7 +55,7 @@ export default function SignUpPage() {
                         />
                     </div>
                     <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium">Nama belakang</label>
+                        <label className="text-sm font-medium">Last name</label>
                         <input
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
@@ -63,7 +64,7 @@ export default function SignUpPage() {
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Email</label>
+                    <label className="text-sm font-medium">Email address</label>
                     <input
                         type="email"
                         required

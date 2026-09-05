@@ -14,9 +14,9 @@ export async function registerUser(data: {
         return { success: true };
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message || 'Registrasi gagal';
+            const message = error.response?.data?.message || 'Registration failed. Please try again.';
             return { success: false, error: message as string };
         }
-        return { success: false, error: 'Registrasi gagal' };
+        return { success: false, error: 'Registration failed. Please try again.' };
     }
 }

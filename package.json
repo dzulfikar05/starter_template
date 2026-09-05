@@ -1,6 +1,6 @@
 {
     "name": "starter-template",
-    "description": "Starter Template — Next.js + NestJS + Clerk + Prisma monorepo",
+    "description": "Starter Template — Next.js + NestJS + Auth.js + Prisma monorepo",
     "license": "MIT",
     "private": true,
     "workspaces": [

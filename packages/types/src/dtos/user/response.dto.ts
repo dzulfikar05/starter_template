@@ -6,6 +6,7 @@ export class UserResponseDto {
     imageUrl?: string | null;
     createdAt!: Date;
     updatedAt!: Date;
+    roles?: string[];
 }
 
 export class DeleteUserResponseDto {
