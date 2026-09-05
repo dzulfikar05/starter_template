@@ -14,6 +14,8 @@ export class CreateRoleDto {
 export class UpdateRoleDto {
     @IsOptional()
     @IsString()
+    @IsNotEmpty()
+    @MinLength(2)
     name?: string;
 
     @IsOptional()

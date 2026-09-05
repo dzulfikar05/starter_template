@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 type UserRole = {
@@ -31,14 +31,15 @@ export function UsersManager() {
     const [pending, setPending] = useState<Record<string, boolean>>({});
     const [loading, setLoading] = useState(true);
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+    const accessToken = session?.accessToken;
 
-    const loadData = async () => {
-        if (!session?.accessToken) return;
+    const loadData = useCallback(async () => {
+        if (!accessToken) return;
         setLoading(true);
         try {
             const [userResponse, roleResponse] = await Promise.all([
-                fetch(`${backendUrl}/user`, { headers: { Authorization: `Bearer ${session.accessToken}` } }),
-                fetch(`${backendUrl}/roles`, { headers: { Authorization: `Bearer ${session.accessToken}` } }),
+                fetch(`${backendUrl}/user`, { headers: { Authorization: `Bearer ${accessToken}` } }),
+                fetch(`${backendUrl}/roles`, { headers: { Authorization: `Bearer ${accessToken}` } }),
             ]);
 
             if (!userResponse.ok || !roleResponse.ok) {
@@ -54,11 +55,12 @@ export function UsersManager() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [accessToken, backendUrl]);
 
     useEffect(() => {
-        void loadData();
-    }, [session?.accessToken]);
+        const timeoutId = window.setTimeout(() => void loadData(), 0);
+        return () => window.clearTimeout(timeoutId);
+    }, [loadData]);
 
     const toggleRole = async (userId: string, roleId: string) => {
         if (!session?.accessToken) return;
